@@ -1,0 +1,50 @@
+-- Create hospital_list table
+CREATE TABLE hospital_list (
+    hospital_id VARCHAR(255) PRIMARY KEY,
+    hospital_name VARCHAR(255) NOT NULL,
+    CONSTRAINT unique_hospital_id UNIQUE (hospital_id) -- Add unique constraint
+);
+
+-- Create user_info table
+CREATE TABLE user_info (
+    user_id VARCHAR(255) PRIMARY KEY,
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
+    user_name VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    hospital_id VARCHAR REFERENCES hospital_list(hospital_id)
+);
+
+-- Create patient_info table
+CREATE TABLE patient_info (
+    patient_id VARCHAR(255) PRIMARY KEY,
+    p_name VARCHAR(255) NOT NULL,
+    p_lastname VARCHAR(255) NOT NULL,
+    id_card VARCHAR(20) UNIQUE,
+    birth DATE,
+    gender VARCHAR(10),
+    blood_type VARCHAR(10),
+    drug_allergy TEXT,
+    sympton TEXT,
+    old_sympton TEXT,
+    test_result TEXT,
+    diagnosis TEXT,
+    medical_right VARCHAR(255),
+    relative_name VARCHAR(255),
+    other_reason TEXT,
+    create_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create referral table
+CREATE TABLE referral (
+    ref_id VARCHAR(255) PRIMARY KEY,
+    patient_id VARCHAR REFERENCES patient_info(patient_id) ON DELETE CASCADE,
+    refer_reason TEXT,
+    treatment_provided TEXT,
+    create_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    from_hospital VARCHAR REFERENCES hospital_list(hospital_id),
+    to_hospital VARCHAR REFERENCES hospital_list(hospital_id),
+    status VARCHAR(20)
+);
